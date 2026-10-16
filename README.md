@@ -20,3 +20,4 @@ Utilizar um mesmo projeto para aplicar, progressivamente, conceitos e práticas 
 Execute o programa pelo terminal:
 
 python cadastro.py
+
