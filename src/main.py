@@ -1,6 +1,8 @@
-"""Programa para cadastro de pessoas. Uso didático na disciplina de GQS."""
+
+"""Programa para cadastro de pessoas com persistencia em MySQL."""
 
 from cadastro import CadastroPessoas
+from repositorio_pessoas_mysql import RepositorioPessoasMySQL
 
 
 def exibir_menu():
@@ -24,6 +26,7 @@ def cadastrar_pessoa(cadastro):
     email = input("Informe o email: ")
 
     cadastro.cadastrar(nome, idade, email)
+    print("Pessoa cadastrada com sucesso!")
 
     if idade >= 18:
         print("Situacao: Maior de idade")
@@ -66,15 +69,18 @@ def alterar_pessoa(cadastro):
         nova_idade = int(input("Nova idade: "))
         novo_email = input("Novo e-mail: ")
 
-        cadastro.alterar(
+        pessoa_alterada = cadastro.alterar(
             procurado,
             novo_nome,
             nova_idade,
             novo_email
         )
 
-        print("Pessoa alterada!")
-        exibir_pessoa(pessoa)
+        if pessoa_alterada is not None:
+            print("Pessoa alterada com sucesso!")
+            exibir_pessoa(pessoa_alterada)
+        else:
+            print("Nao foi possivel alterar a pessoa.")
 
 
 def listar_pessoas(cadastro):
@@ -142,8 +148,9 @@ def analisar_pessoa(cadastro):
 
 
 def executar():
-    """Executa o menu principal da aplicação."""
-    cadastro = CadastroPessoas()
+    """Executa o menu principal da aplicacao."""
+    repositorio = RepositorioPessoasMySQL()
+    cadastro = CadastroPessoas(repositorio)
     op = 0
 
     while op != 6:

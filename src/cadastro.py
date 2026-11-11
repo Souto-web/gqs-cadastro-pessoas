@@ -35,13 +35,9 @@ class CadastroPessoas:
 
     def alterar(self, nome, novo_nome, nova_idade, novo_email):
         """Altera os dados de uma pessoa cadastrada."""
-        pessoa = self.buscarPorNome(nome)
+        nova_pessoa = Pessoa(novo_nome, nova_idade, novo_email)
 
-        if pessoa is None:
-            return None
+        if self.__repositorio.alterar(nome, nova_pessoa):
+            return nova_pessoa
 
-        pessoa.setNome(novo_nome)
-        pessoa.setIdade(nova_idade)
-        pessoa.setEmail(novo_email)
-
-        return pessoa
+        return None
