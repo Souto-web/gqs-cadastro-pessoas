@@ -1,36 +1,43 @@
+
 """Gerenciamento do cadastro de pessoas."""
 
+from typing import List, Optional
+
 from pessoa import Pessoa
+from repositorio_pessoas import RepositorioPessoas
 from repositorio_pessoas_memoria import RepositorioPessoasMemoria
 
 
 class CadastroPessoas:
     """Gerencia o cadastro usando um repositorio."""
 
-    def __init__(self, repositorio=None):
+    def __init__(
+        self,
+        repositorio: Optional[RepositorioPessoas] = None,
+    ) -> None:
         if repositorio is None:
             repositorio = RepositorioPessoasMemoria()
         self.__repositorio = repositorio
 
     def cadastrar(self, nome, idade, email):
+        """Cadastra uma pessoa."""
         pessoa = Pessoa(nome, idade, email)
-        self.__repositorio.adicionar(pessoa)
+        self.__repositorio.cadastrar(pessoa)
         return pessoa
 
     def buscarPorNome(self, nome):
-        return self.__repositorio.buscarPorNome(nome)
+        """Busca uma pessoa pelo nome."""
+        return self.__repositorio.buscar(nome)
 
-    def listar(self):
+    def listar(self) -> List[Pessoa]:
+        """Lista as pessoas cadastradas."""
         return self.__repositorio.listar()
 
     def alterar(self, nome, novo_nome, nova_idade, novo_email):
-        pessoa = self.buscarPorNome(nome)
+        """Altera os dados de uma pessoa cadastrada."""
+        nova_pessoa = Pessoa(novo_nome, nova_idade, novo_email)
 
-        if pessoa is None:
-            return None
+        if self.__repositorio.alterar(nome, nova_pessoa):
+            return nova_pessoa
 
-        pessoa.setNome(novo_nome)
-        pessoa.setIdade(nova_idade)
-        pessoa.setEmail(novo_email)
-
-        return pessoa
+        return None

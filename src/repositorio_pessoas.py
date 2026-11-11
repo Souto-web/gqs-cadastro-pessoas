@@ -1,19 +1,27 @@
-"""Contrato para repositorios de pessoas."""
+
+"""Define o contrato para o armazenamento de pessoas."""
 
 from abc import ABC, abstractmethod
+from typing import List, Optional
+
+from pessoa import Pessoa
 
 
 class RepositorioPessoas(ABC):
-    """Define as operacoes do repositorio."""
+    """Contrato abstrato para repositorios de pessoas."""
 
     @abstractmethod
-    def adicionar(self, pessoa):
-        """Adiciona uma pessoa."""
+    def cadastrar(self, pessoa: Pessoa) -> None:
+        """Armazena uma pessoa."""
 
     @abstractmethod
-    def buscarPorNome(self, nome):
+    def buscar(self, nome: str) -> Optional[Pessoa]:
         """Busca uma pessoa pelo nome."""
 
     @abstractmethod
-    def listar(self):
-        """Retorna as pessoas cadastradas."""
+    def listar(self) -> List[Pessoa]:
+        """Retorna a lista de pessoas."""
+
+    @abstractmethod
+    def alterar(self, nome: str, nova_pessoa: Pessoa) -> bool:
+        """Altera uma pessoa identificada pelo nome."""

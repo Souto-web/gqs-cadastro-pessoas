@@ -1,22 +1,37 @@
-"""Repositorio de pessoas armazenadas em memoria."""
 
+"""Implementa o repositorio de pessoas em memoria."""
+
+from typing import List, Optional
+
+from pessoa import Pessoa
 from repositorio_pessoas import RepositorioPessoas
 
 
 class RepositorioPessoasMemoria(RepositorioPessoas):
-    """Armazena pessoas em uma lista."""
+    """Armazena pessoas em uma lista na memoria."""
 
-    def __init__(self):
-        self.__pessoas = []
+    def __init__(self) -> None:
+        self.__pessoas: List[Pessoa] = []
 
-    def adicionar(self, pessoa):
+    def cadastrar(self, pessoa: Pessoa) -> None:
+        """Adiciona uma pessoa ao repositorio."""
         self.__pessoas.append(pessoa)
 
-    def buscarPorNome(self, nome):
+    def buscar(self, nome: str) -> Optional[Pessoa]:
+        """Busca uma pessoa pelo nome."""
         for pessoa in self.__pessoas:
             if pessoa.getNome() == nome:
                 return pessoa
         return None
 
-    def listar(self):
-        return self.__pessoas
+    def listar(self) -> List[Pessoa]:
+        """Retorna uma copia da lista de pessoas."""
+        return list(self.__pessoas)
+
+    def alterar(self, nome: str, nova_pessoa: Pessoa) -> bool:
+        """Substitui uma pessoa identificada pelo nome."""
+        for indice, pessoa in enumerate(self.__pessoas):
+            if pessoa.getNome() == nome:
+                self.__pessoas[indice] = nova_pessoa
+                return True
+        return False
