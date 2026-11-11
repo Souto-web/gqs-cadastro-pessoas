@@ -23,3 +23,16 @@ def test_buscar_por_nome():
     assert encontrada.getNome() == "Ana"
     assert encontrada.getIdade() == 20
     assert encontrada.getEmail() == "ana@example.com"
+    
+def test_listar_duas_pessoas():
+    """Verifica a listagem de duas pessoas cadastradas."""
+    cadastro = CadastroPessoas()
+
+    cadastro.cadastrar("Ana", 20, "ana@example.com")
+    cadastro.cadastrar("Bruno", 25, "bruno@example.com")
+
+    pessoas = cadastro.listar()
+
+    assert len(pessoas) == 2
+    assert pessoas[0].getNome() == "Ana"
+    assert pessoas[1].getNome() == "Bruno"
