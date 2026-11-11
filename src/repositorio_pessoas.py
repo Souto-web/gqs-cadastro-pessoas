@@ -8,7 +8,7 @@ from pessoa import Pessoa
 
 
 class RepositorioPessoas(ABC):
-    """Contrato abstrato para repositórios de pessoas."""
+    """Contrato abstrato para repositorios de pessoas."""
 
     @abstractmethod
     def cadastrar(self, pessoa: Pessoa) -> None:

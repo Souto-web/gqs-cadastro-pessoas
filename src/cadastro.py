@@ -9,7 +9,7 @@ from repositorio_pessoas_memoria import RepositorioPessoasMemoria
 
 
 class CadastroPessoas:
-    """Mantém e gerencia o conjunto de pessoas cadastradas."""
+    """Gerencia o cadastro usando um repositorio."""
 
     def __init__(
         self,

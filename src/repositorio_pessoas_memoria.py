@@ -1,5 +1,5 @@
 
-"""Implementa o repositório de pessoas em memória."""
+"""Implementa o repositorio de pessoas em memoria."""
 
 from typing import List, Optional
 
@@ -8,13 +8,13 @@ from repositorio_pessoas import RepositorioPessoas
 
 
 class RepositorioPessoasMemoria(RepositorioPessoas):
-    """Armazena pessoas em uma lista na memória."""
+    """Armazena pessoas em uma lista na memoria."""
 
     def __init__(self) -> None:
         self.__pessoas: List[Pessoa] = []
 
     def cadastrar(self, pessoa: Pessoa) -> None:
-        """Adiciona uma pessoa ao repositório."""
+        """Adiciona uma pessoa ao repositorio."""
         self.__pessoas.append(pessoa)
 
     def buscar(self, nome: str) -> Optional[Pessoa]:
@@ -25,7 +25,7 @@ class RepositorioPessoasMemoria(RepositorioPessoas):
         return None
 
     def listar(self) -> List[Pessoa]:
-        """Retorna uma cópia da lista de pessoas."""
+        """Retorna uma copia da lista de pessoas."""
         return list(self.__pessoas)
 
     def alterar(self, nome: str, nova_pessoa: Pessoa) -> bool:
