@@ -1,186 +1,217 @@
 # Contribuindo com o projeto
 
-Este projeto é utilizado na disciplina de Gestão da Qualidade de Software.
+Este projeto é desenvolvido na disciplina de **Gestão da Qualidade de Software**, da UTFPR.
 
-As alterações devem ser realizadas de forma incremental e verificável, preservando o funcionamento do sistema durante sua evolução.
+As contribuições devem ser realizadas de forma incremental, com testes, análise de qualidade e registro das alterações no GitHub.
 
-## Preparação do ambiente
+## 1. Preparação do ambiente
 
-Após clonar o repositório:
+Clone o repositório:
 
-```bash
-git clone https://github.com/julianolamb/gqs-cadastro-pessoas.git
+```powershell
+git clone https://github.com/joenckk/gqs-cadastro-pessoas.git
 cd gqs-cadastro-pessoas
 ```
 
-Instale as ferramentas utilizadas no projeto:
+Crie e ative o ambiente virtual:
 
-```bash
-pip install pylint radon pre-commit
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-Ative o hook do pre-commit:
+Se o PowerShell bloquear a ativação, execute:
 
-```bash
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+```
+
+Instale as dependências:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+Configure os hooks automáticos:
+
+```powershell
 pre-commit install
 ```
 
-O comando `pre-commit install` deve ser executado em cada novo clone do repositório, pois o hook é instalado localmente no diretório `.git`.
+## 2. Atualização do repositório
 
-O arquivo `.pre-commit-config.yaml` faz parte do projeto e é versionado pelo Git. Portanto, ele é obtido normalmente ao realizar o clone.
+Antes de começar uma alteração, atualize a branch utilizada na atividade GCS-01:
 
-## Antes de iniciar uma alteração
-
-Atualize a branch principal:
-
-```bash
-git switch main
-git pull
-```
-
-Verifique o estado do repositório:
-
-```bash
+```powershell
+git switch base-gcs-01
+git pull origin base-gcs-01
 git status
 ```
 
-A árvore de trabalho deve estar limpa antes de iniciar uma nova alteração.
+Verifique se existem alterações locais antes de iniciar o trabalho.
 
-## Trabalhando com branches
+## 3. Criação de branches
 
-Alterações relevantes devem ser realizadas em uma branch própria.
+Cada alteração deve ser desenvolvida em uma branch própria.
 
 Exemplo:
 
-```bash
-git switch -c refactor/orientacao-objetos
+```powershell
+git switch -c feature/minha-alteracao
 ```
 
-A branch permite desenvolver e verificar uma alteração sem modificar diretamente a versão estável disponível em `main`.
+Para mudanças de documentação:
 
-## Durante o desenvolvimento
+```powershell
+git switch -c docs/minha-documentacao
+```
 
-Faça alterações pequenas e relacionadas a um único objetivo.
+Evite desenvolver diretamente na branch `base-gcs-01`.
 
-Após cada etapa:
+## 4. Execução da aplicação
 
-1. execute o programa;
-2. verifique se o comportamento esperado foi preservado;
-3. confira os arquivos modificados;
-4. registre a alteração em um commit.
+A aplicação utiliza MySQL com Docker Compose.
 
-Para executar o programa:
+Inicie os serviços:
 
-```bash
+```powershell
+docker compose -f infra/compose.yaml up -d
+```
+
+Confira se os contêineres estão saudáveis:
+
+```powershell
+docker compose -f infra/compose.yaml ps
+```
+
+Configure a senha do MySQL na sessão atual do PowerShell:
+
+```powershell
+$env:MYSQL_PASSWORD = Read-Host "Digite a senha do MySQL"
+```
+
+Execute o programa:
+
+```powershell
 python src/main.py
 ```
 
-Para verificar as alterações:
+Não inclua senhas em arquivos versionados, commits ou Pull Requests.
 
-```bash
-git status
-git diff
+## 5. Testes automatizados
+
+Antes de registrar uma alteração, execute:
+
+```powershell
+python -m pytest -v
 ```
 
-## Análise estática
+Os testes verificam as operações de cadastro, busca e persistência da alteração.
 
-O projeto utiliza Pylint para análise estática.
+Caso algum teste falhe, investigue e corrija o problema antes de solicitar o merge.
 
-A análise pode ser executada manualmente com:
+## 6. Qualidade do código
 
-```bash
-pylint src
+Execute a análise estática:
+
+```powershell
+pylint src tests
 ```
 
-O projeto também utiliza `pre-commit`. O hook configurado é executado automaticamente durante a realização dos commits.
+Também é possível executar os hooks manualmente:
 
-Se a verificação falhar, o commit não será realizado. Os problemas apontados devem ser analisados e corrigidos antes de uma nova tentativa.
-
-Também é possível executar manualmente todos os hooks configurados:
-
-```bash
+```powershell
 pre-commit run --all-files
 ```
 
-## Métricas
+Os hooks configurados são executados automaticamente durante os commits.
 
-A complexidade ciclomática pode ser analisada com Radon:
+## 7. Commits
 
-```bash
-radon cc src -s
-```
+Confira as modificações:
 
-Os resultados devem ser interpretados considerando a responsabilidade e o contexto de cada função ou método.
-
-## Commits
-
-Antes de realizar um commit, verifique as alterações:
-
-```bash
+```powershell
 git status
 git diff
+git diff --check
 ```
 
 Adicione somente os arquivos relacionados à alteração:
 
-```bash
-git add <arquivos>
+```powershell
+git add caminho/do/arquivo
 ```
 
-Os commits devem representar alterações pequenas e verificáveis, com mensagens que indiquem claramente o objetivo da mudança.
+Crie um commit com uma mensagem objetiva:
 
-Exemplos:
-
-```text
-refactor: reorganiza estrutura do projeto
-refactor: cria classe Pessoa
-refactor: encapsula operacoes em CadastroPessoas
-refactor: separa interface da aplicacao
-docs: atualiza orientacoes de contribuicao
-style: corrige apontamentos do pylint
+```powershell
+git commit -m "docs: atualiza documentacao do projeto"
 ```
 
-Depois do commit, o histórico pode ser consultado com:
+Exemplos de prefixos:
 
-```bash
+- `feat:` — nova funcionalidade.
+- `fix:` — correção.
+- `test:` — testes.
+- `refactor:` — reorganização de código.
+- `docs:` — documentação.
+
+Não utilize `git add .` sem conferir os arquivos, para evitar incluir arquivos temporários ou dados sensíveis.
+
+## 8. Pull Requests e revisão
+
+Depois de criar o commit, envie sua branch:
+
+```powershell
+git push -u origin nome-da-branch
+```
+
+No GitHub, abra um Pull Request para a branch `base-gcs-01` deste repositório.
+
+Na descrição do Pull Request, informe:
+
+- O objetivo da alteração.
+- Os arquivos ou funcionalidades modificados.
+- Os testes realizados.
+- Os resultados do Pytest e do Pylint.
+
+Confira os arquivos alterados e possíveis conflitos antes de realizar o merge.
+
+Em contribuições entre estudantes, o autor e o revisor devem estar identificados no histórico do GitHub.
+
+## 9. Arquivos que não devem ser enviados
+
+Não adicione ao Git:
+
+- Senhas e arquivos com credenciais.
+- Ambientes virtuais, como `.venv/`.
+- Arquivos temporários e cópias de segurança.
+- Diretórios `__pycache__/`.
+- Arquivos `.pyc`.
+
+Consulte o `.gitignore` e confira o resultado de `git status` antes de cada commit.
+
+## 10. Histórico e evidências
+
+Para consultar os commits:
+
+```powershell
 git log --oneline
 ```
 
-Para inspecionar as alterações registradas em um commit específico:
+Para consultar um commit específico:
 
-```bash
-git show <hash>
+```powershell
+git show HASH_DO_COMMIT
 ```
 
-## Arquivos que não devem ser versionados
+Os Pull Requests, os commits e os resultados das verificações podem ser utilizados como evidências no diário técnico da atividade.
 
-Arquivos temporários ou gerados automaticamente pelas ferramentas não devem ser adicionados ao repositório.
+## Autoria
 
-O arquivo `.gitignore` define arquivos e diretórios que devem ser ignorados pelo Git.
+**Isabella Vieira Joenck**
 
-Exemplos:
+Gestão da Qualidade de Software — UTFPR
 
-```text
-__pycache__/
-*.pyc
-```
-
-## Antes de integrar uma alteração
-
-Antes de realizar o merge, execute o programa e as verificações previstas:
-
-```bash
-python src/main.py
-pylint src
-radon cc src -s
-git status
-```
-
-Confirme que:
-
-- o comportamento esperado foi preservado;
-- não existem problemas de análise estática que precisem ser corrigidos;
-- as métricas foram verificadas quando pertinentes;
-- não existem alterações pendentes no repositório.
-
-Somente depois dessas verificações a alteração deve ser integrada à branch principal.
+Repositório: https://github.com/joenckk/gqs-cadastro-pessoas
