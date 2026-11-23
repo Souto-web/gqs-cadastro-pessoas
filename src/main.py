@@ -1,9 +1,15 @@
-"""Programa para cadastro de pessoas. Uso didático na disciplina de GQS."""
+"""Programa para cadastro de pessoas. Uso didatico na disciplina de GQS."""
 
 from cadastro import CadastroPessoas
+from repositorio_pessoas_memoria import RepositorioPessoasMemoria
+from repositorio_pessoas_mysql import RepositorioPessoasMySQL
+
+USAR_MYSQL = True
+
+USAR_MYSQM = True
 
 
-def exibir_menu():
+def exibil_menu():
     """Exibe o menu principal."""
     print("=========================")
     print(" CADASTRO DE PESSOAS")
@@ -66,7 +72,7 @@ def alterar_pessoa(cadastro):
         nova_idade = int(input("Nova idade: "))
         novo_email = input("Novo e-mail: ")
 
-        cadastro.alterar(
+        pessoa_alterada = cadastro.alterar(
             procurado,
             novo_nome,
             nova_idade,
@@ -74,7 +80,8 @@ def alterar_pessoa(cadastro):
         )
 
         print("Pessoa alterada!")
-        exibir_pessoa(pessoa)
+        if pessoa_alterada is not None:
+            exibir_pessoa(pessoa_alterada)
 
 
 def listar_pessoas(cadastro):
@@ -141,13 +148,20 @@ def analisar_pessoa(cadastro):
         )
 
 
+def criar_repositorio():
+    """Seleciona o repositorio de acordo com USAR_MYSQL."""
+    if USAR_MYSQL:
+        return RepositorioPessoasMySQL()
+    return RepositorioPessoasMemoria()
+
+
 def executar():
-    """Executa o menu principal da aplicação."""
-    cadastro = CadastroPessoas()
+    """Executa o menu principal da aplicacao."""
+    cadastro = CadastroPessoas(criar_repositorio())
     op = 0
 
     while op != 6:
-        op = exibir_menu()
+        op = exibil_menu()
 
         if op == 1:
             cadastrar_pessoa(cadastro)
