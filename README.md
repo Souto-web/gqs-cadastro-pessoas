@@ -163,3 +163,47 @@ As orientações para contribuir estão disponíveis em `CONTRIBUTING.md`.
 Gestão da Qualidade de Software — UTFPR
 
 Repositório: https://github.com/joenckk/gqs-cadastro-pessoas
+
+## Análise de complexidade com RADON
+
+O projeto utiliza o RADON para analisar a complexidade ciclomática do código Python.
+
+Para executar a análise:
+
+`python -m radon cc src -a -s`
+
+Na análise realizada, o projeto apresentou complexidade média **A (1,86)**, indicando baixa complexidade ciclomática.
+
+## Verificação da replicação MySQL
+
+O projeto utiliza dois servidores MySQL:
+
+- **Principal:** porta 3307.
+- **Réplica:** porta 3308.
+
+Para acessar o servidor réplica:
+
+`docker exec -it infra-replica-1 mysql -uroot -p`
+
+Informe a senha configurada no ambiente.
+
+Dentro do MySQL, execute:
+
+`SHOW REPLICA STATUS\G`
+
+Verifique se:
+
+- `Replica_IO_Running: Yes`
+- `Replica_SQL_Running: Yes`
+- `Seconds_Behind_Source: 0`
+- `Last_Errno: 0`
+
+Para consultar os dados replicados:
+
+`SELECT * FROM cadastro_pessoas.pessoas;`
+
+Para sair do MySQL:
+
+`exit;`
+
+A replicação foi validada por meio do cadastro de uma pessoa no banco principal e da confirmação do mesmo registro no banco réplica.
