@@ -184,3 +184,18 @@ Confirme que:
 - não existem alterações pendentes no repositório.
 
 Somente depois dessas verificações a alteração deve ser integrada à branch principal.
+## Testes Automatizados e Pull Request
+
+Execute a suíte de testes automatizados com PyTest antes de abrir um Pull Request:
+
+```bash
+python -m pytest -v
+```
+
+Publique sua branch dedicada no GitHub e abra um Pull Request apontando para `main`:
+
+```bash
+git push -u origin <nome-da-branch>
+```
+
+A contribuição será revisada (`Files changed`) e integrada  à `main` após aprovação nos testes e nO Pylint.
