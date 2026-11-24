@@ -72,3 +72,34 @@ def test_alterar_persiste(fabrica):
     assert pessoa is not None
     assert pessoa.getIdade() == 31
     assert pessoa.getEmail() == "ana.s@example.com"
+
+
+def test_buscar_pessoa_inexistente():
+    """Retorna None quando o nome nao esta cadastrado."""
+    cadastro = CadastroPessoas()
+    cadastro.cadastrar("Ana", 20, "ana@example.com")
+
+    assert cadastro.buscarPorNome("Carlos") is None
+
+
+def test_alterar_pessoa_inexistente():
+    """Garante que alterar registro inexistente retorna False e nao altera dados."""
+    cadastro = CadastroPessoas()
+    cadastro.cadastrar("Ana", 20, "ana@example.com")
+
+    resultado = cadastro.alterar("Carlos", "Carlos Silva", 25, "carlos@example.com")
+
+    assert not resultado
+    assert len(cadastro.listar()) == 1
+
+
+def test_listar_multiplas_pessoas():
+    """Confere a listagem de multiplos registros cadastrados."""
+    cadastro = CadastroPessoas()
+    cadastro.cadastrar("Ana", 20, "ana@example.com")
+    cadastro.cadastrar("Bruno", 25, "bruno@example.com")
+
+    pessoas = cadastro.listar()
+
+    assert len(pessoas) == 2
+    assert [p.getNome() for p in pessoas] == ["Ana", "Bruno"]
